@@ -1,27 +1,29 @@
-import { useState } from 'react'
-import beaver from './assets/beaver.svg'
-import { hcWithType } from 'server/dist/client'
+import { useState } from "react";
+import beaver from "./assets/beaver.svg";
+import { hcWithType } from "server/dist/client";
 
-const SERVER_URL = import.meta.env.VITE_SERVER_URL || "http://localhost:3000"
+const SERVER_URL = import.meta.env.VITE_SERVER_URL || "http://localhost:3000";
 
 type ResponseType = Awaited<ReturnType<typeof client.hello.$get>>;
 
 const client = hcWithType(SERVER_URL);
 
 function App() {
-  const [data, setData] = useState<Awaited<ReturnType<ResponseType["json"]>> | undefined>()
+  const [data, setData] = useState<
+    Awaited<ReturnType<ResponseType["json"]>> | undefined
+  >();
 
   async function sendRequest() {
     try {
-      const res = await client.hello.$get()
+      const res = await client.hello.$get();
       if (!res.ok) {
-        console.log("Error fetching data")
-        return
+        console.log("Error fetching data");
+        return;
       }
-      const data = await res.json()
-      setData(data)
+      const data = await res.json();
+      setData(data);
     } catch (error) {
-      console.log(error)
+      console.log(error);
     }
   }
 
@@ -37,27 +39,32 @@ function App() {
       <h1 className="text-5xl font-black">bhvr</h1>
       <h2 className="text-2xl font-bold">Bun + Hono + Vite + React</h2>
       <p>A typesafe fullstack monorepo</p>
-      <div className='flex items-center gap-4'>
+      <div className="flex items-center gap-4">
         <button
           onClick={sendRequest}
           className="bg-black text-white px-2.5 py-1.5 rounded-md"
         >
           Call API
         </button>
-        <a target='_blank' href="https://bhvr.dev" className='border-1 border-black text-black px-2.5 py-1.5 rounded-md'>
+        <a
+          target="_blank"
+          href="https://bhvr.dev"
+          className="border-1 border-black text-black px-2.5 py-1.5 rounded-md"
+        >
           Docs
         </a>
       </div>
-        {data && (
-          <pre className="bg-gray-100 p-4 rounded-md">
-            <code>
+      {data && (
+        <pre className="bg-gray-100 p-4 rounded-md">
+          <code>
             Message: {data.message} <br />
             Success: {data.success.toString()}
-            </code>
-          </pre>
-        )}
+          </code>
+        </pre>
+      )}
     </div>
-  )
+  );
 }
 
-export default App
+export default App;
+
